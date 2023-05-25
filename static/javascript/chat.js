@@ -56,7 +56,7 @@ const conversa = () =>{
     xhr.send("incoming_id="+incoming_id);
 }
 conversa();
-setInterval(conversa, 50000);
+setInterval(conversa, 500);
 
 function scrollToBottom(){
     chatBox.scrollTop = chatBox.scrollHeight;
