@@ -1,0 +1,31 @@
+{% include 'head.html' %}
+
+<body>
+  <div class="wrapper">
+    <section class="users">
+      <header>
+        <div class="content">
+          <img src="/static/images/{{ user['img'] }}"
+            alt="Foto de perfil de {{ user['fname'] }}">
+          <div class="details">
+            <span>{{ user['fname'] }} {{ user['lname'] }}</span>
+            <p>{{ user['status'] }}</p>
+          </div>
+        </div>
+        <a href="/logout?logout_id={{ user['unique_id'] }}"
+          class="logout">Logout</a>
+      </header>
+      <div class="search">
+        <span class="text">Select an user to start chat</span>
+        <input type="text"
+          placeholder="Enter name to search...">
+        <button><i class="fas fa-search"></i></button>
+      </div>
+      <div class="users-list">
+      </div>
+    </section>
+  </div>
+  <script src="{{ url_for('static', filename='javascript/users.js') }}"></script>
+</body>
+
+</html>
