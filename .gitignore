@@ -1,1 +1,3 @@
 **/*.pyc
+.vercel
+__pycache__
