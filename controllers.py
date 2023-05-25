@@ -1,6 +1,8 @@
 from flask import render_template, request, session, redirect, url_for
 from werkzeug.utils import secure_filename
-from models import User, Message, db, engine
+from models import engine, db
+from models.user import User
+from models.message import Message
 from sqlalchemy import text
 import random, hashlib, time, os
 
@@ -8,7 +10,7 @@ class UserController:
     def get_users():
         if 'unique_id' in session:
             outgoing_id = session['unique_id']
-            sql = f"SELECT * FROM users WHERE NOT unique_id = {outgoing_id} ORDER BY user_id DESC"
+            sql = f"SELECT * FROM users WHERE NOT unique_id = {outgoing_id} ORDER BY status ASC, fname ASC"
             with engine.connect() as conn:
                 query = conn.execute(text(sql)).mappings()
                 conn.close()
@@ -97,9 +99,8 @@ class UserController:
                 if user.password == hashlib.md5(password.encode()).hexdigest():
                     session["unique_id"] = user.unique_id
                     status = "Active now"
-                    sql = f"UPDATE users SET status = '{status}' WHERE unique_id = {user.unique_id}"
-                    with engine.connect() as conn:
-                        conn.execute(text(sql))
+                    user.status = status
+                    db.session.commit()
                     return 'success'
             return 'Email or password is incorrect!'
         else:
@@ -143,9 +144,9 @@ class UserController:
     def logout():
         if 'unique_id' in session:
             unique_id = session['unique_id']
-            sql = f"UPDATE users SET status = 'Offline' WHERE unique_id = {unique_id}"
-            with engine.connect() as conn:
-                conn.execute(text(sql))
+            userlogged = User.query.filter_by(unique_id=unique_id).first()
+            userlogged.status = "Offline now"
+            db.session.commit()
             session.pop('unique_id', None)
         return redirect(url_for('index'))
 

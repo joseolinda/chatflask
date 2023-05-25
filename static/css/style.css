@@ -22,6 +22,18 @@ body{
   box-shadow: 0 0 128px 0 rgba(0,0,0,0.1),
               0 32px 64px -48px rgba(0,0,0,0.5);
 }
+.wrapper.full-size{
+  min-height: calc(100vh - 24px);
+  max-width: none;
+  border-radius: 0;
+}
+
+@media (max-width: 600px) {
+  .wrapper{
+    max-width: none;
+    min-height: calc(100vh - 100px);
+  }
+}
 
 /* Login & Signup Form CSS Start */
 .form{
